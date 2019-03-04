@@ -1,5 +1,5 @@
 variables:
-    SolutionBaseName: 'NCS.DSS.Goal'
+    SolutionBaseName: 'NCS.DSS.ChangeFeedSqlProcessor'
     BuildPlatform: 'any cpu'
     BuildConfiguration: 'release'
 
