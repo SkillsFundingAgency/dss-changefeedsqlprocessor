@@ -11,18 +11,6 @@
     "configEnvironmentName": {
       "type": "string"
     },
-    "cosmosDbCollectionId": {
-      "type": "string"
-    },
-    "cosmosDbDatabaseId": {
-      "type": "string"
-    },
-    "cosmosDbEndpoint": {
-      "type": "string"
-    },
-    "cosmosDbKey": {
-      "type": "string"
-    },
     "serviceBusConnectionString": {
       "type": "string"
     }
@@ -58,22 +46,6 @@
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
-            },
-            {
-              "name": "CollectionId",
-              "value": "[parameters('cosmosDbCollectionId')]"
-            },
-            {
-              "name": "DatabaseId",
-              "value": "[parameters('cosmosDbDatabaseId')]"
-            },
-            {
-              "name": "Endpoint",
-              "value": "[parameters('cosmosDbEndpoint')]"
-            },
-            {
-              "name": "Key",
-              "value": "[parameters('cosmosDbKey')]"
             },
             {
               "name": "ServiceBusConnectionString",
