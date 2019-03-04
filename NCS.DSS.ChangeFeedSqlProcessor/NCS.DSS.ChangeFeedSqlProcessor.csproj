@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <AzureFunctionsVersion>v1</AzureFunctionsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DFC.AzureSql.Standard" Version="0.1.1" />
+    <PackageReference Include="DFC.Common.Standard" Version="0.1.0" />
+    <PackageReference Include="DFC.Configuration" Version="0.1.7" />
+    <PackageReference Include="DFC.Functions.DI.Standard" Version="0.1.0" />
+    <PackageReference Include="DFC.HTTP.Standard" Version="0.1.5" />
+    <PackageReference Include="DFC.JSON.Standard" Version="0.1.2" />
+    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.2" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="3.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="host.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+</Project>

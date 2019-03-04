@@ -1,0 +1,25 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
+
+    "CollectionId": "subscriptions",
+    "DatabaseId": "subscriptions",
+
+    "ServiceBusConnectionString": "Endpoint=sb://dss-test-shared-ns.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=UZqdAlpLBmUnkJ4S3p7ozUYIm9UfPHQUw6jZm1Jh7OQ=",
+
+    // LOCAL
+    //"Endpoint": "https://localhost:8081",
+    //"Key": "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
+
+    //// AT
+    //"Endpoint": "https://dss-at-shared-cdb.documents.azure.com:443/",
+    //"Key": "gN8fmksIp9YAz7a3GHARnMlr7EdA3MWg3vEVEHkIrWfqHhl9Mpxd651fwmgqfCEgmuFEaGDU3OJLNouL6zlbmQ=="
+
+     //TEST
+    "Endpoint": "https://dss-test-shared-cdb.documents.azure.com:443/",
+    "Key": "3rPhdPvdAIjuXdn4JfLzpzPu90EdLXusnTsm20ejr6s8o30WLJS5ehkSiha0VIn360epUoCkPEt13EIResG5WQ=="
+
+  }
+}
