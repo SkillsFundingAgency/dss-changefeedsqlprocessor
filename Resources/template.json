@@ -45,6 +45,9 @@
           "appServiceType": {
             "value": "functionapp"
           },
+          "deployStagingSlot": {
+            "value": false
+          },
           "appServiceAppSettings": {
             "value": [
               {
