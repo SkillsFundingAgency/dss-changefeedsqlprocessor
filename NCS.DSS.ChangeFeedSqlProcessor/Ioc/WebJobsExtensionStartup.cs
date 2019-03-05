@@ -8,13 +8,12 @@ using DFC.JSON.Standard;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using NCS.DSS.ChangeFeedSqlProcessor.Ioc;
 using NCS.DSS.ChangeFeedSqlProcessor.Service;
-using NCS.DSS.Customer.Ioc;
-
 
 [assembly: WebJobsStartup(typeof(WebJobsExtensionStartup), "Web Jobs Extension Startup")]
 
-namespace NCS.DSS.Customer.Ioc
+namespace NCS.DSS.ChangeFeedSqlProcessor.Ioc
 {
     public class WebJobsExtensionStartup : IWebJobsStartup
     {
@@ -24,7 +23,6 @@ namespace NCS.DSS.Customer.Ioc
 
             RegisterHelpers(builder);
             RegisterServices(builder);
-            RegisterDataProviders(builder);
             RegisterSQLServer(builder);
         }
 
@@ -37,11 +35,6 @@ namespace NCS.DSS.Customer.Ioc
         private void RegisterServices(IWebJobsBuilder builder)
         {
             builder.Services.AddScoped<IChangeFeedQueueProcessorService, ChangeFeedQueueProcessorService>();
-        }
-
-        private void RegisterDataProviders(IWebJobsBuilder builder)
-        {
-            
         }
 
         private void RegisterSQLServer(IWebJobsBuilder builder)
