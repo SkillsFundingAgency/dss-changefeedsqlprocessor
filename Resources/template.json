@@ -71,7 +71,7 @@
               },
               {
                 "name": "QueueName",
-                "value": "dss.changefeedsqlprocessor"
+                "value": "dss.changefeedqueue"
               },
               {
                 "name": "ServiceBusConnectionString",
