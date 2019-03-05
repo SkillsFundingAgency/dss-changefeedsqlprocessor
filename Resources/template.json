@@ -60,7 +60,7 @@
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
+              "value": "[reference(variables('appInsightsName')).outputs.InstrumentationKey.value]"
             },
             {
               "name": "ServiceBusConnectionString",
