@@ -20,7 +20,6 @@
     "appInsightsName": "[toLower(concat(parameters('changeFeedProcessorPrefix'), '-ai'))]",
     "environmentName": "[toUpper(split(parameters('changeFeedProcessorPrefix'), '-')[1])]",
     "functionAppName": "[toLower(concat(parameters('changeFeedProcessorPrefix'), '-fa'))]"
-
   },
   "resources": [
     {
@@ -46,28 +45,30 @@
           "appServiceType": {
             "value": "functionapp"
           },
-          "appServiceAppSettings": [
-            {
-              "name": "EnvironmentName",
-              "value": "[variables('environmentName')]"
-            },
-            {
-              "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~1"
-            },
-            {
-              "name": "MSDEPLOY_RENAME_LOCKED_FILES",
-              "value": "1"
-            },
-            {
-              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "[reference(variables('appInsightsName')).outputs.InstrumentationKey.value]"
-            },
-            {
-              "name": "ServiceBusConnectionString",
-              "value": "[parameters('serviceBusConnectionString')]"
-            }
-          ]
+          "appServiceAppSettings": {
+            "value": [
+              {
+                "name": "EnvironmentName",
+                "value": "[variables('environmentName')]"
+              },
+              {
+                "name": "FUNCTIONS_EXTENSION_VERSION",
+                "value": "~1"
+              },
+              {
+                "name": "MSDEPLOY_RENAME_LOCKED_FILES",
+                "value": "1"
+              },
+              {
+                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                "value": "[reference(variables('appInsightsName')).outputs.InstrumentationKey.value]"
+              },
+              {
+                "name": "ServiceBusConnectionString",
+                "value": "[parameters('serviceBusConnectionString')]"
+              }
+            ]
+          }
         }
       },
       "dependsOn": [
