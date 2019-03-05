@@ -18,6 +18,7 @@
   "variables": {
     "buildingBlocksDfcBaseUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
     "appInsightsName": "[toLower(concat(parameters('changeFeedProcessorPrefix'), '-ai'))]",
+    "environmentName": "[toUpper(split(parameters('changeFeedProcessorPrefix'), '-')[1])]",
     "functionAppName": "[toLower(concat(parameters('changeFeedProcessorPrefix'), '-fa'))]"
 
   },
@@ -48,7 +49,7 @@
           "appServiceAppSettings": [
             {
               "name": "EnvironmentName",
-              "value": "[toUpper(split(parameters('changeFeedProcessorPrefix'), '-')[1])]"
+              "value": "[variables('environmentName')]"
             },
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
