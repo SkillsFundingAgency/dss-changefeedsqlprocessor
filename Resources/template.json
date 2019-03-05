@@ -13,6 +13,9 @@
     },
     "sharedAppServicePlanResourceGroup": {
       "type": "string"
+    },
+    "sqlConnectionString": {
+      "type": "string"
     }
   },
   "variables": {
@@ -67,8 +70,16 @@
                 "value": "[reference(variables('appInsightsName')).outputs.InstrumentationKey.value]"
               },
               {
+                "name": "QueueName",
+                "value": "dss.changefeedsqlprocessor"
+              },
+              {
                 "name": "ServiceBusConnectionString",
                 "value": "[parameters('serviceBusConnectionString')]"
+              },
+              {
+                "name": "SQLConnString",
+                "value": "[parameters('sqlConnectionString')]"
               }
             ]
           }
