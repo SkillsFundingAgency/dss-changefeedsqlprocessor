@@ -10,10 +10,9 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
 {
     public static class ChangeFeedQueueProcessor
     {
-
         [FunctionName("ChangeFeedQueueProcessor")]
         public static async System.Threading.Tasks.Task RunAsync(
-            [ServiceBusTrigger("dss.changefeedsqlprocessor", Connection = "ServiceBusConnectionString")]Message queueItem, 
+            [ServiceBusTrigger("%QueueName%", Connection = "ServiceBusConnectionString")]Message queueItem, 
             ILogger log,
             [Inject]ILoggerHelper loggerHelper,
             [Inject]IChangeFeedQueueProcessorService changeFeedQueueProcessorService)

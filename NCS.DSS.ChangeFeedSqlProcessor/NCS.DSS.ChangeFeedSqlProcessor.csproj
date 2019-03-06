@@ -1,21 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
-    <AzureFunctionsVersion>v1</AzureFunctionsVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AzureFunctionsVersion>v2</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DFC.AzureSql.Standard" Version="0.1.1" />
     <PackageReference Include="DFC.Common.Standard" Version="0.1.0" />
-    <PackageReference Include="DFC.Configuration" Version="0.1.7" />
     <PackageReference Include="DFC.Functions.DI.Standard" Version="0.1.0" />
     <PackageReference Include="DFC.HTTP.Standard" Version="0.1.5" />
     <PackageReference Include="DFC.JSON.Standard" Version="0.1.2" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.2" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="3.0.1" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

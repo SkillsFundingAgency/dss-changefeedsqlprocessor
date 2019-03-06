@@ -32,15 +32,11 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             var documentModel = JsonConvert.DeserializeObject<ChangeFeedMessageModel>(body);
 
             if (documentModel == null)
-            {
                 return false;
-            }
-            else
-            {
-                await SendToStoredProc(documentModel, log);
 
-                return true;
-            }
+            await SendToStoredProc(documentModel, log);
+
+            return true;
         }
 
         private async Task SendToStoredProc(ChangeFeedMessageModel documentModel, ILogger log)
@@ -49,13 +45,13 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 
             try
             {
-                string resourceName = GetResourceName(documentModel);
-                string CommandText = "Change_Feed_Insert_Update_" + resourceName;
-                string ParameterName = "@Json";
+                var resourceName = GetResourceName(documentModel);
+                var commandText = "Change_Feed_Insert_Update_" + resourceName;
+                const string parameterName = "@Json";
 
                 if (!string.IsNullOrWhiteSpace(resourceName))
                 {
-                    await _sqlServerProvider.UpsertResource(documentModel.Document, log, CommandText, ParameterName);
+                    await _sqlServerProvider.UpsertResource(documentModel.Document, log, commandText, parameterName);
                 }
             }
             catch (Exception ex)
@@ -68,43 +64,43 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
         }
 
 
-        private string GetResourceName(ChangeFeedMessageModel documentModel)
+        private static string GetResourceName(ChangeFeedMessageModel documentModel)
         {
-            if (documentModel.IsAction == true)
+            if (documentModel.IsAction)
             {
                 return "dss-actions";
             }
-            else if (documentModel.IsActionPlan == true)
+            else if (documentModel.IsActionPlan)
             {
                 return "dss-actionplans";
             }
-            else if (documentModel.IsAddress == true)
+            else if (documentModel.IsAddress)
             {
                 return "dss-addresses";
             }
-            else if (documentModel.IsAdviserDetail == true)
+            else if (documentModel.IsAdviserDetail)
             {
                 return "dss-adviserdetails";
             }
-            else if (documentModel.IsCustomer == true)
+            else if (documentModel.IsCustomer)
             {
                 return "dss-customers";
             }
-            else if (documentModel.IsGoal == true)
+            else if (documentModel.IsGoal)
             {
                 return "dss-goals";
             }
-            else if (documentModel.IsOutcome == true)
+            else if (documentModel.IsOutcome)
             {
                 return "dss-outcomes";
             }
-            else if (documentModel.IsSession == true)
+            else if (documentModel.IsSession)
             {
                 return "dss-sessions";
             }
             else
             {
-                return "";
+                return string.Empty;
             }
         }
 
