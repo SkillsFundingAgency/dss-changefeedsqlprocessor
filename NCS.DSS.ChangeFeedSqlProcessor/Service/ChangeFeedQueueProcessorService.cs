@@ -26,8 +26,13 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 
         public async Task<bool> SendToAzureSql(Message queueItem, ILogger log)
         {
+            if (queueItem == null)
+                return false;
 
-            var body = new StreamReader(queueItem.GetBody<Stream>(), Encoding.UTF8).ReadToEnd();
+            var body = Encoding.UTF8.GetString(queueItem.Body);
+
+            if (string.IsNullOrEmpty(body))
+                return false;
 
             var documentModel = JsonConvert.DeserializeObject<ChangeFeedMessageModel>(body);
 
