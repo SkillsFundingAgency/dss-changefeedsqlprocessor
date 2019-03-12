@@ -18,23 +18,46 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
         private readonly ILoggerHelper _loggerHelper;
         private readonly ISQLServerProvider _sqlServerProvider;
 
+        public Guid CorrelationId { get; set; }
+
         public ChangeFeedQueueProcessorService(ILoggerHelper loggerHelper, ISQLServerProvider sqlServerProvider)
         {
             _loggerHelper = loggerHelper;
             _sqlServerProvider = sqlServerProvider;
         }
 
+
         public async Task<bool> SendToAzureSql(Message queueItem, ILogger log)
         {
             if (queueItem == null)
                 return false;
 
-            var body = Encoding.UTF8.GetString(queueItem.Body);
+            string body;
+
+            try
+            {
+                body = Encoding.UTF8.GetString(queueItem.Body);
+            }
+            catch (Exception e)
+            {
+                _loggerHelper.LogException(log, CorrelationId, "unable to get string from queue Item body", e);
+                throw;
+            }
 
             if (string.IsNullOrEmpty(body))
                 return false;
 
-            var documentModel = JsonConvert.DeserializeObject<ChangeFeedMessageModel>(body);
+            ChangeFeedMessageModel documentModel;
+
+            try
+            {
+                documentModel = JsonConvert.DeserializeObject<ChangeFeedMessageModel>(body);
+            }
+            catch (JsonException e)
+            {
+                _loggerHelper.LogException(log, CorrelationId, "unable to deserialize document model", e);
+                throw;
+            }
 
             if (documentModel == null)
                 return false;
@@ -48,16 +71,26 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
         {
             _loggerHelper.LogMethodEnter(log);
 
+            if (documentModel == null)
+            {
+                _loggerHelper.LogInformationMessage(log, CorrelationId, "document model is null");
+                return;
+            }
+
+            var resourceName = GetResourceName(documentModel);
+            var commandText = "Change_Feed_Insert_Update_" + resourceName;
+            const string parameterName = "@Json";
+
+            if (string.IsNullOrWhiteSpace(resourceName))
+            {
+                _loggerHelper.LogInformationMessage(log, CorrelationId, "resource Name is null");
+                return;
+            }
+
             try
             {
-                var resourceName = GetResourceName(documentModel);
-                var commandText = "Change_Feed_Insert_Update_" + resourceName;
-                const string parameterName = "@Json";
-
-                if (!string.IsNullOrWhiteSpace(resourceName))
-                {
-                    await _sqlServerProvider.UpsertResource(documentModel.Document, log, commandText, parameterName);
-                }
+                _loggerHelper.LogInformationMessage(log, CorrelationId, "attempting to insert document into SQL");
+                await _sqlServerProvider.UpsertResource(documentModel.Document, log, commandText, parameterName);
             }
             catch (Exception ex)
             {

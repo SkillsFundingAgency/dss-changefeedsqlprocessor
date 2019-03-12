@@ -17,19 +17,21 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
             [Inject]ILoggerHelper loggerHelper,
             [Inject]IChangeFeedQueueProcessorService changeFeedQueueProcessorService)
         {
+            var correlationId = Guid.NewGuid();
             if (queueItem == null)
             {
-                log.LogError("Brokered Message cannot be null");
+                loggerHelper.LogInformationMessage(log, correlationId, "Brokered Message cannot be null");
                 return;
             }
 
             try
             {
+                changeFeedQueueProcessorService.CorrelationId = correlationId;
                 await changeFeedQueueProcessorService.SendToAzureSql(queueItem, log);
             }
             catch (Exception ex)
             {
-                log.LogError(ex.StackTrace);
+                loggerHelper.LogError(log, correlationId, "Unable to send document to sql", ex);
                 throw;
             }
 
