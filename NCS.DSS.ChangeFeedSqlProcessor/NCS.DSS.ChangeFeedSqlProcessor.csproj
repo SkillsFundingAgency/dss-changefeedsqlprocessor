@@ -4,7 +4,7 @@
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DFC.AzureSql.Standard" Version="0.1.1" />
+    <PackageReference Include="DFC.AzureSql.Standard" Version="0.1.3" />
     <PackageReference Include="DFC.Common.Standard" Version="0.1.0" />
     <PackageReference Include="DFC.Functions.DI.Standard" Version="0.1.0" />
     <PackageReference Include="DFC.HTTP.Standard" Version="0.1.5" />

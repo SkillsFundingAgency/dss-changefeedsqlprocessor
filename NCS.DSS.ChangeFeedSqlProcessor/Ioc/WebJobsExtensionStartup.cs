@@ -40,7 +40,6 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Ioc
         private void RegisterSQLServer(IWebJobsBuilder builder)
         {
             builder.Services.AddScoped<ISQLServerProvider, SQLServerProvider>();
-            builder.Services.AddScoped<IDbConnection>(db => new SqlConnection(Environment.GetEnvironmentVariable("SQLConnString")));
         }
     }
 }
