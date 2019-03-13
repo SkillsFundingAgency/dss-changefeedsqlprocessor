@@ -31,7 +31,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
             }
             catch (Exception ex)
             {
-                loggerHelper.LogError(log, correlationId, "Unable to send document to sql", ex);
+                loggerHelper.LogException(log, correlationId, "Unable to send document to sql", ex);
                 throw;
             }
 
