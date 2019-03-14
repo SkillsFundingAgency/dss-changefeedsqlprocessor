@@ -25,8 +25,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             _loggerHelper = loggerHelper;
             _sqlServerProvider = sqlServerProvider;
         }
-
-
+        
         public async Task<bool> SendToAzureSql(Message queueItem, ILogger log)
         {
             if (queueItem == null)
@@ -95,13 +94,13 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             catch (Exception ex)
             {
                 _loggerHelper.LogException(log, Guid.NewGuid(), "Error when trying to insert & update change feed request into SQL", ex);
+                throw;
             }
 
             _loggerHelper.LogMethodExit(log);
                        
         }
-
-
+        
         private static string GetResourceName(ChangeFeedMessageModel documentModel)
         {
             if (documentModel.IsAction)
@@ -144,4 +143,3 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 
     }
 }
-

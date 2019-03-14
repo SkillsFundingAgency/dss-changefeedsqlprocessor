@@ -17,6 +17,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
             [Inject]ILoggerHelper loggerHelper,
             [Inject]IChangeFeedQueueProcessorService changeFeedQueueProcessorService)
         {
+
             var correlationId = Guid.NewGuid();
             if (queueItem == null)
             {
@@ -34,7 +35,6 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
                 loggerHelper.LogException(log, correlationId, "Unable to send document to sql", ex);
                 throw;
             }
-
 
         }
     }
