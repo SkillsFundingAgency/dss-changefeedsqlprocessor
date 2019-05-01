@@ -147,6 +147,10 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             {
                 return "dss-sessions";
             }
+            else if (documentModel.IsSubscription)
+            {
+                return "dss-subscriptions";
+            }
             else if (documentModel.IsTransfer)
             {
                 return "dss-transfers";
