@@ -119,9 +119,21 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             {
                 return "dss-adviserdetails";
             }
+            else if (documentModel.IsContact)
+            {
+                return "dss-contacts";
+            }
             else if (documentModel.IsCustomer)
             {
                 return "dss-customers";
+            }
+            else if (documentModel.IsDiversity)
+            {
+                return "dss-diversity";
+            }
+            else if (documentModel.IsInteraction)
+            {
+                return "dss-interactions";
             }
             else if (documentModel.IsGoal)
             {
@@ -134,6 +146,18 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             else if (documentModel.IsSession)
             {
                 return "dss-sessions";
+            }
+            else if (documentModel.IsSubscription)
+            {
+                return "dss-subscriptions";
+            }
+            else if (documentModel.IsTransfer)
+            {
+                return "dss-transfers";
+            }
+            else if (documentModel.IsWebChat)
+            {
+                return "dss-webchats";
             }
             else
             {
