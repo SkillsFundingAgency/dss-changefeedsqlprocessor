@@ -1,11 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using DFC.AzureSql.Standard;
 using DFC.Common.Standard.Logging;
 using Microsoft.Azure.ServiceBus;
-using Microsoft.Azure.ServiceBus.InteropExtensions;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedSqlProcessor.Models;
 using Newtonsoft.Json;
@@ -119,6 +117,10 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             {
                 return "dss-adviserdetails";
             }
+            else if (documentModel.IsCollection)
+            {
+                return "dss-collections";
+            }
             else if (documentModel.IsContact)
             {
                 return "dss-contacts";
@@ -131,13 +133,21 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             {
                 return "dss-diversity";
             }
-            else if (documentModel.IsInteraction)
+            else if (documentModel.IsEmploymentProgression)
             {
-                return "dss-interactions";
+                return "dss-employmentprogressions";
             }
             else if (documentModel.IsGoal)
             {
                 return "dss-goals";
+            }
+            else if (documentModel.IsInteraction)
+            {
+                return "dss-interactions";
+            }
+            else if (documentModel.IsLearningProgression)
+            {
+                return "dss-learningprogressions";
             }
             else if (documentModel.IsOutcome)
             {
