@@ -1,7 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using DFC.AzureSql.Standard;
+﻿using DFC.AzureSql.Standard;
 using DFC.Common.Standard.Logging;
 using DFC.Functions.DI.Standard;
 using DFC.JSON.Standard;
