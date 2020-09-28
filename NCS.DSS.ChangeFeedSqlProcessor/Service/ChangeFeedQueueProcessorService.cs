@@ -169,6 +169,10 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             {
                 return "dss-webchats";
             }
+            else if (documentModel.IsDigitalIdentity)
+            {
+                return "dss-digitalidentities";
+            }
             else
             {
                 return string.Empty;
