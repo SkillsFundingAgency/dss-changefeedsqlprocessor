@@ -10,13 +10,13 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
 {
     public class ChangeFeedQueueProcessor
     {
-        private readonly IChangeFeedQueueProcessorService changeFeedQueueProcessorService;
+        private readonly IChangeFeedQueueProcessorService _changeFeedQueueProcessorService;
         private readonly ILoggerHelper loggerHelper;
 
-        public ChangeFeedQueueProcessor(IChangeFeedQueueProcessorService _changeFeedQueueProcessorService,
+        public ChangeFeedQueueProcessor(IChangeFeedQueueProcessorService changeFeedQueueProcessorService,
             ILoggerHelper _loggerHelper)
         {
-            changeFeedQueueProcessorService = _changeFeedQueueProcessorService;
+            _changeFeedQueueProcessorService = changeFeedQueueProcessorService;
             loggerHelper = _loggerHelper;
         }
 
@@ -35,8 +35,8 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
 
             try
             {
-                changeFeedQueueProcessorService.CorrelationId = correlationId;
-                await changeFeedQueueProcessorService.SendToAzureSql(queueItem, log);
+                _changeFeedQueueProcessorService.CorrelationId = correlationId;
+                await _changeFeedQueueProcessorService.SendToAzureSql(queueItem, log);
             }
             catch (Exception ex)
             {
