@@ -13,6 +13,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddLogging();
             builder.Services.AddSingleton<ILoggerHelper, LoggerHelper>();
             builder.Services.AddSingleton<ISQLServerProvider, SQLServerProvider>();
             builder.Services.AddSingleton<IChangeFeedQueueProcessorService, ChangeFeedQueueProcessorService>();
