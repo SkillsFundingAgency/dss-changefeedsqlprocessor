@@ -1,22 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AzureFunctionsVersion>v2</AzureFunctionsVersion>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+    <RuntimeFrameworkVersion>3.1</RuntimeFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DFC.AzureSql.Standard" Version="0.1.4" />
-    <PackageReference Include="DFC.Common.Standard" Version="0.1.0" />
-    <PackageReference Include="DFC.Functions.DI.Standard" Version="0.1.0" />
-    <PackageReference Include="DFC.HTTP.Standard" Version="0.1.5" />
-    <PackageReference Include="DFC.JSON.Standard" Version="0.1.2" />
-    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.2" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="3.0.1" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
+    <PackageReference Include="DFC.Common.Standard" Version="0.1.4" />
+    <PackageReference Include="DFC.HTTP.Standard" Version="0.1.11" />
+    <PackageReference Include="DFC.JSON.Standard" Version="0.1.4" />
+    <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.22" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.9" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
