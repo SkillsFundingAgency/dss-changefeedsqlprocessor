@@ -3,6 +3,7 @@ using DFC.Common.Standard.Logging;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using NCS.DSS.ChangeFeedSqlProcessor.Models;
 using NCS.DSS.ChangeFeedSqlProcessor.Service;
 
 
@@ -22,12 +23,12 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
 
         [FunctionName("ChangeFeedQueueProcessor")]
         public async System.Threading.Tasks.Task RunAsync(
-            [ServiceBusTrigger("%QueueName%", Connection = "ServiceBusConnectionString")]Message queueItem, 
+            [ServiceBusTrigger("%QueueName%", Connection = "ServiceBusConnectionString")] ChangeFeedMessageModel message, 
             ILogger log)
         {
 
             var correlationId = Guid.NewGuid();
-            if (queueItem == null)
+            if (message == null)
             {
                 loggerHelper.LogInformationMessage(log, correlationId, "Brokered Message cannot be null");
                 return;
@@ -36,7 +37,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
             try
             {
                 _changeFeedQueueProcessorService.CorrelationId = correlationId;
-                await _changeFeedQueueProcessorService.SendToAzureSql(queueItem, log);
+                await _changeFeedQueueProcessorService.SendToAzureSql(message, log);
             }
             catch (Exception ex)
             {
