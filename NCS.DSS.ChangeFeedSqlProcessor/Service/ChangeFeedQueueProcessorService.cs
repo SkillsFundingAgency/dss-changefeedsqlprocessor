@@ -24,43 +24,9 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             _sqlServerProvider = sqlServerProvider;
         }
         
-        public async Task<bool> SendToAzureSql(Message queueItem, ILogger log)
+        public async Task<bool> SendToAzureSql(ChangeFeedMessageModel message, ILogger log)
         {
-            if (queueItem == null)
-                return false;
-
-            string body;
-
-            try
-            {
-                body = Encoding.UTF8.GetString(queueItem.Body);
-            }
-            catch (Exception e)
-            {
-                _loggerHelper.LogException(log, CorrelationId, "unable to get string from queue Item body", e);
-                throw;
-            }
-
-            if (string.IsNullOrEmpty(body))
-                return false;
-
-            ChangeFeedMessageModel documentModel;
-
-            try
-            {
-                documentModel = JsonConvert.DeserializeObject<ChangeFeedMessageModel>(body);
-            }
-            catch (JsonException e)
-            {
-                _loggerHelper.LogException(log, CorrelationId, "unable to deserialize document model", e);
-                throw;
-            }
-
-            if (documentModel == null)
-                return false;
-
-            await SendToStoredProc(documentModel, log);
-
+            await SendToStoredProc(message, log);
             return true;
         }
 
