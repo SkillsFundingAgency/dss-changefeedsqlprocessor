@@ -16,6 +16,9 @@
         },
         "sharedAppServicePlanResourceGroup": {
             "value": ""
+        },
+        "appInsightsInstrumentationKey": {
+          "value": "__appInsightsInstrumentationKey__" 
         }
     }
 }
