@@ -13,7 +13,7 @@
             "value": ""
         },
         "appInsightsInstrumentationKey": {
-          "value": "__appInsightsInstrumentationKey__" 
+            "value": "__appInsightsInstrumentationKey__" 
         },
         "changeFeedProcessorPrefix": {
             "value": ""
@@ -22,10 +22,16 @@
             "value": ""
         },
         "storageAccountName" : {
-        "value": ""
+            "value": ""
         },
         "storageAccountKey" : {
-        "value": ""
+            "value": ""
+        },
+        "workspaceName": {
+            "value": "__sharedLogAnalyticsWorkspace__"
+        },
+        "workspaceResourceGroup": {
+            "value": "__sharedLogAnalyticsResourceGroup__"
         }
 
     }
