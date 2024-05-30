@@ -9,11 +9,14 @@
         "sharedAppServicePlanName": {
             "value": ""
         },
+        "functionAppSuffix": {
+            "value": ""
+        },
         "sharedAppServicePlanResourceGroup": {
             "value": ""
         },
         "appInsightsInstrumentationKey": {
-            "value": "__appInsightsInstrumentationKey__" 
+            "value": "__appInsightsInstrumentationKey__"
         },
         "changeFeedProcessorPrefix": {
             "value": ""
