@@ -17,6 +17,9 @@
     "sharedAppServicePlanResourceGroup": {
       "type": "string"
     },
+    "functionAppSuffix": {
+      "type": "string"
+    },
     "sqlConnectionString": {
       "type": "string"
     },
@@ -38,7 +41,7 @@
     //"appInsightsName": "[toLower(concat(parameters('changeFeedProcessorPrefix'), '-ai'))]",
     "FunctionAppInsightInstrumentationKey":"[parameters('appInsightsInstrumentationKey')]",
     "environmentName": "[toUpper(split(parameters('changeFeedProcessorPrefix'), '-')[1])]",
-    "functionAppName": "[toLower(concat(parameters('changeFeedProcessorPrefix'), '-fa'))]",
+    "functionAppName": "[toLower(concat(parameters('changeFeedProcessorPrefix'), '-fa', parameters('functionAppSuffix'))]",
     "storageAccountConnectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=', parameters('storageAccountKey'), ';EndpointSuffix=core.windows.net')]"
   },
   "resources": [
