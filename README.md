@@ -1,8 +1,11 @@
-# dss-changefeedsqlprocessor
+# DSS Change Feed SQL Processor
+
+> [!NOTE]  
+> The latest version of this API is `v2`
 
 [![Build Status](https://sfa-gov-uk.visualstudio.com/CDS%202.0/_apis/build/status/Yaml/dss-changefeedsqlprocessor?repoName=SkillsFundingAgency%2Fdss-changefeedsqlprocessor&branchName=master-v2)](https://sfa-gov-uk.visualstudio.com/CDS%202.0/_build/latest?definitionId=1488&repoName=SkillsFundingAgency%2Fdss-changefeedsqlprocessor&branchName=master-v2)
 
-Function app to provide that syncs cosmos changes to a sql database.
+Function App to provide an API that will sync CosmosDB changes to a SQL Server DB. This repo contains a Service Bus trigger.
 
 ## Developer Setup
 
