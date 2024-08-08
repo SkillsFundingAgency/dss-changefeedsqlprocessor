@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
 using DFC.AzureSql.Standard;
 using DFC.Common.Standard.Logging;
-using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedSqlProcessor.Models;
-using Newtonsoft.Json;
 
 namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 {
