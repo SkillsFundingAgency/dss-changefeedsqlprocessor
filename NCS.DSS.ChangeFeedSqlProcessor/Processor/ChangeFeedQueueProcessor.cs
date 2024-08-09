@@ -37,7 +37,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
             }
             catch (Exception ex)
             {                
-                _logger.LogError("CorrelationId: {0}  Message: {1} Exception: {2}", correlationId, "Unable to send document to sql", ex);
+                _logger.LogError($"CorrelationId: {correlationId}  Message: Unable to send document to sql Exception: {ex}");
                 throw;
             }
 
