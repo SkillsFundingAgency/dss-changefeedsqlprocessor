@@ -7,35 +7,28 @@
             "value": "__serviceBusConnectionString__"
         },
         "sharedAppServicePlanName": {
-            "value": ""
+            "value": "__SharedAppServicePlanName__"
         },
         "functionAppSuffix": {
-            "value": ""
+            "value": "__FunctionAppSuffix__"
         },
         "sharedAppServicePlanResourceGroup": {
-            "value": ""
+            "value": "__SharedAppServicePlanResourceGroup__"
         },
         "appInsightsInstrumentationKey": {
             "value": "__appInsightsInstrumentationKey__"
         },
         "changeFeedProcessorPrefix": {
-            "value": ""
+            "value": "__ChangeFeedProcessorPrefix__"
         },
         "sqlConnectionString": {
-            "value": ""
+            "value": "__SqlConnectionString__"
         },
         "storageAccountName" : {
-            "value": ""
+            "value": "__storageAccountName__"
         },
         "storageAccountKey" : {
-            "value": ""
-        },
-        "workspaceName": {
-            "value": "__sharedLogAnalyticsWorkspace__"
-        },
-        "workspaceResourceGroup": {
-            "value": "__sharedLogAnalyticsResourceGroup__"
+            "value": "__storageAccountKey__"
         }
-
     }
 }

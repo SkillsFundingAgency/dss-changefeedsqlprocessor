@@ -28,12 +28,6 @@
     },
     "storageAccountKey": {
       "type": "string"
-    },
-    "workspaceName": {
-        "type": "string"
-    },
-    "workspaceResourceGroup": {
-        "type": "string"
     }
   },
   "variables": {
@@ -69,9 +63,6 @@
           },
           "deployStagingSlot": {
             "value": false
-          },
-          "workspaceId": {
-            "value": "[resourceId(parameters('workspaceResourceGroup'), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
           },
           "appServiceAppSettings": {
             "value": [
