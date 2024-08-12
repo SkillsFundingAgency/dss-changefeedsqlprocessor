@@ -29,7 +29,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
                 _logger.LogInformation($"CorrelationId: {correlationId} Message: Brokered Message cannot be null");
                 return;
             }
-
+            _logger.LogInformation($"This is the new version 3");
             try
             {
                 _changeFeedQueueProcessorService.CorrelationId = correlationId;
