@@ -27,7 +27,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
 
             if (message == null)
             {                
-                _logger.LogInformation($"CorrelationId: {correlationId} Message: Brokered Message cannot be null");
+                _logger.LogInformation($"CorrelationId: {correlationId} Message: Service Bus Received Message cannot be null");
                 return;
             }
             
