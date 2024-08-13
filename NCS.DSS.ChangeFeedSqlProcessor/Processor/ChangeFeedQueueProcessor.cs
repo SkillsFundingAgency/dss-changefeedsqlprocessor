@@ -1,10 +1,8 @@
 using System;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.ChangeFeedSqlProcessor.Models;
 using NCS.DSS.ChangeFeedSqlProcessor.Service;
 using Microsoft.Azure.Functions.Worker;
 using Azure.Messaging.ServiceBus;
-using System.Text.Json;
 
 
 namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
@@ -27,11 +25,6 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
         {
             var correlationId = Guid.NewGuid();
 
-            _logger.LogInformation("Message ID: {id}", message.MessageId);
-            _logger.LogInformation("Message Body: {body}", message.Body);
-            _logger.LogInformation("Message Content-Type: {contentType}", message.ContentType);           
-                        
-
             if (message == null)
             {                
                 _logger.LogInformation($"CorrelationId: {correlationId} Message: Brokered Message cannot be null");
@@ -39,10 +32,9 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
             }
             
             try
-            {
-                var messageModel = JsonSerializer.Deserialize<ChangeFeedMessageModel>(message.Body.ToString());
+            {                
                 _changeFeedQueueProcessorService.CorrelationId = correlationId;
-                await _changeFeedQueueProcessorService.SendToAzureSql(messageModel, _logger);
+                await _changeFeedQueueProcessorService.SendToAzureSql(message.Body.ToString(), _logger);
             }
             catch (Exception ex)
             {                

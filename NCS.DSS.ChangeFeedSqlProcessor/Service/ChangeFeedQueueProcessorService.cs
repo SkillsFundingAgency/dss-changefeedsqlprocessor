@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using DFC.AzureSql.Standard;
 using DFC.Common.Standard.Logging;
@@ -24,6 +25,20 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
         public async Task<bool> SendToAzureSql(ChangeFeedMessageModel message, ILogger log)
         {
             await SendToStoredProc(message, log);
+            return true;
+        }
+
+        public async Task<bool> SendToAzureSql(string message, ILogger log)
+        {   
+            var messageObject = JsonDocument.Parse(message);            
+            var documentJson = messageObject
+                                .RootElement
+                                .GetProperty("Document")
+                                .ToString();
+
+            var messageModel = JsonSerializer.Deserialize<ChangeFeedMessageModel>(message);
+
+            await SendToStoredProc(messageModel, message, log);
             return true;
         }
 
@@ -63,7 +78,44 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             _loggerHelper.LogMethodExit(log);
                        
         }
-        
+
+        private async Task SendToStoredProc(ChangeFeedMessageModel documentModel, string documentJson, ILogger log)
+        {
+            _loggerHelper.LogMethodEnter(log);
+
+            if (documentModel == null)
+            {
+                _loggerHelper.LogInformationMessage(log, CorrelationId, "document model is null");
+                return;
+            }
+
+            var resourceName = GetResourceName(documentModel);
+            var commandText = "Change_Feed_Insert_Update_" + resourceName;
+            const string parameterName = "@Json";
+
+            if (string.IsNullOrWhiteSpace(resourceName))
+            {
+                _loggerHelper.LogInformationMessage(log, CorrelationId, "resource Name is null");
+                return;
+            }
+
+            try
+            {
+                _loggerHelper.LogInformationMessage(log, CorrelationId, "attempting to insert document into SQL");
+
+                _loggerHelper.LogInformationObject(log, CorrelationId, "view document message", documentModel);
+                await _sqlServerProvider.UpsertResource(documentJson, log, commandText, parameterName);
+            }
+            catch (Exception ex)
+            {
+                _loggerHelper.LogException(log, Guid.NewGuid(), "Error when trying to insert & update change feed request into SQL", ex);
+                throw;
+            }
+
+            _loggerHelper.LogMethodExit(log);
+
+        }
+
         private static string GetResourceName(ChangeFeedMessageModel documentModel)
         {
             if (documentModel.IsAction)

@@ -2,6 +2,7 @@ using DFC.AzureSql.Standard;
 using DFC.Common.Standard.Logging;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NCS.DSS.ChangeFeedSqlProcessor.Models;
 
 namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
 {
@@ -28,8 +29,10 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
             var logMessage = "document model is null";
             _loggerHelper.Setup(l => l.LogInformationMessage(_logger.Object, It.IsAny<Guid>(), logMessage)).Verifiable();
 
+            ChangeFeedMessageModel model = null;
+
             //Act
-            var result = await _service.SendToAzureSql(null, _logger.Object);
+            var result = await _service.SendToAzureSql(model, _logger.Object);
 
             //Assert
             Assert.That(result, Is.True);
