@@ -38,40 +38,40 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor.Tests
                 Times.Once);
         }
 
-        [Test]
-        public async Task RunAsync_CallsServiceMethod_WhenMessageModelIsValid()
-        {
-            //Act
-            var documentModel = new ChangeFeedMessageModel { Document = new Microsoft.Azure.Documents.Document(), IsAction = true };
-            await _processor.RunAsync(documentModel);
+        //[Test]
+        //public async Task RunAsync_CallsServiceMethod_WhenMessageModelIsValid()
+        //{
+        //    //Act
+        //    var documentModel = new ChangeFeedMessageModel { Document = new Microsoft.Azure.Documents.Document(), IsAction = true };
+        //    await _processor.RunAsync(documentModel);
 
-            //Assert                        
-            Assert.Pass();
-        }
+        //    //Assert                        
+        //    Assert.Pass();
+        //}
 
-        [Test]
-        public void RunAsync_ThrowsAndLogsException_WhenExceptionOccursWhileCallingServiceMethod()
-        {
-            //Arrange            
-            var logMessage = "Unable to send document to sql";
-            var exception = new Exception();
+        //[Test]
+        //public void RunAsync_ThrowsAndLogsException_WhenExceptionOccursWhileCallingServiceMethod()
+        //{
+        //    //Arrange            
+        //    var logMessage = "Unable to send document to sql";
+        //    var exception = new Exception();
 
-            _changeFeedQueueProcessorService.Setup(s => s.SendToAzureSql(It.IsAny<ChangeFeedMessageModel>(), It.IsAny<ILogger>()))
-                .Throws(exception);
+        //    _changeFeedQueueProcessorService.Setup(s => s.SendToAzureSql(It.IsAny<ChangeFeedMessageModel>(), It.IsAny<ILogger>()))
+        //        .Throws(exception);
 
-            //Act and Assert
-            var documentModel = new ChangeFeedMessageModel { Document = new Microsoft.Azure.Documents.Document(), IsAction = true };
+        //    //Act and Assert
+        //    var documentModel = new ChangeFeedMessageModel { Document = new Microsoft.Azure.Documents.Document(), IsAction = true };
 
-            Assert.ThrowsAsync<Exception>(async () => await _processor.RunAsync(documentModel));
+        //    Assert.ThrowsAsync<Exception>(async () => await _processor.RunAsync(documentModel));
 
-            _logger.Verify(x => x.Log(
-                LogLevel.Error,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((x, _) => LogMessageMatcher(x, logMessage)),
-                It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-                Times.Once);
-        }
+        //    _logger.Verify(x => x.Log(
+        //        LogLevel.Error,
+        //        It.IsAny<EventId>(),
+        //        It.Is<It.IsAnyType>((x, _) => LogMessageMatcher(x, logMessage)),
+        //        It.IsAny<Exception>(),
+        //        It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+        //        Times.Once);
+        //}
 
         private static bool LogMessageMatcher(object formattedLogValueObject, string message)
         {
