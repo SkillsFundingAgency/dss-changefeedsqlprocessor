@@ -50,6 +50,8 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             try
             {
                 _loggerHelper.LogInformationMessage(log, CorrelationId, "attempting to insert document into SQL");
+
+                _loggerHelper.LogInformationObject(log, CorrelationId, "view document message", documentModel);
                 await _sqlServerProvider.UpsertResource(documentModel.Document, log, commandText, parameterName);
             }
             catch (Exception ex)
