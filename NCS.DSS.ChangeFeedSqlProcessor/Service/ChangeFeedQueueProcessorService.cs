@@ -31,14 +31,18 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             }
 
             var messageObject = JsonDocument.Parse(message);
-            var documentJson = messageObject
-                                .RootElement
-                                .GetProperty("Document")
-                                .ToString();
+
+            var documentElementFound = messageObject.RootElement.TryGetProperty("Document", out var documentJsonElement);
+
+            if (!documentElementFound)
+            {
+                _loggerHelper.LogInformationMessage(log, CorrelationId, "document is not found in the message");
+                return false;
+            }
 
             var messageModel = JsonSerializer.Deserialize<ChangeFeedMessageModel>(message);
 
-            return await SendToStoredProc(messageModel, message, log);
+            return await SendToStoredProc(messageModel, documentJsonElement.ToString(), log);
         }       
 
         private async Task<bool> SendToStoredProc(ChangeFeedMessageModel documentModel, string documentJson, ILogger log)
@@ -59,7 +63,9 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             try
             {
                 _loggerHelper.LogInformationMessage(log, CorrelationId, "attempting to insert document into SQL");
-                
+
+                _loggerHelper.LogInformationMessage(log, CorrelationId, $"Document Json: {documentJson}");                
+
                 returnValue = await _sqlServerProvider.UpsertResource(documentJson, log, commandText, parameterName);                
             }
             catch (Exception ex)

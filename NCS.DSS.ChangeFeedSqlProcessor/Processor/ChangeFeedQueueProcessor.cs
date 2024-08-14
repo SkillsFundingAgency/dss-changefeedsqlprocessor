@@ -30,7 +30,9 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
                 _logger.LogInformation($"CorrelationId: {correlationId} Message: Service Bus Received Message cannot be null");
                 return;
             }
-            
+
+            _logger.LogInformation("Message Body: {body}", message.Body);
+
             try
             {                
                 _changeFeedQueueProcessorService.CorrelationId = correlationId;
