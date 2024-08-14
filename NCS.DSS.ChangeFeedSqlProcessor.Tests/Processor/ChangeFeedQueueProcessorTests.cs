@@ -30,8 +30,8 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor.Tests
 
             //Assert                        
             _logger.Verify(x => x.Log(
-                LogLevel.Information, 
-                It.IsAny<EventId>(), 
+                LogLevel.Information,
+                It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((x, _) => LogMessageMatcher(x, logMessage)),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
@@ -74,13 +74,13 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor.Tests
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
                 Times.Once);
-        }        
+        }
 
         private static bool LogMessageMatcher(object formattedLogValueObject, string message)
         {
             var logValues = formattedLogValueObject as IReadOnlyList<KeyValuePair<string, object>>;
 
-            if (logValues == null)            
+            if (logValues == null)
                 return false;
 
             var logData = logValues.FirstOrDefault(logValue => logValue.Key == "{OriginalFormat}");

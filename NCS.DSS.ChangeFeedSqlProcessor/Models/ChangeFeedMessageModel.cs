@@ -1,12 +1,12 @@
 ﻿namespace NCS.DSS.ChangeFeedSqlProcessor.Models
 {
     public class ChangeFeedMessageModel
-    {        
+    {
         public bool IsAction { get; set; }
         public bool IsActionPlan { get; set; }
         public bool IsAddress { get; set; }
         public bool IsAdviserDetail { get; set; }
-        public bool IsCollection{ get; set; }
+        public bool IsCollection { get; set; }
         public bool IsContact { get; set; }
         public bool IsCustomer { get; set; }
         public bool IsDiversity { get; set; }

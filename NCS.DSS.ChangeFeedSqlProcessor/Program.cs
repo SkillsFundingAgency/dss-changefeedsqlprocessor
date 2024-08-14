@@ -5,7 +5,8 @@ using Microsoft.Extensions.Hosting;
 using NCS.DSS.ChangeFeedSqlProcessor.Service;
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()
-    .ConfigureServices(services => {
+    .ConfigureServices(services =>
+    {
         services.AddLogging();
         services.AddSingleton<ILoggerHelper, LoggerHelper>();
         services.AddSingleton<ISQLServerProvider, SQLServerProvider>();
