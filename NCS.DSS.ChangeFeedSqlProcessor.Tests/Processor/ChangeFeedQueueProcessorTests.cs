@@ -83,14 +83,9 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor.Tests
             if (logValues == null)
                 return false;
 
-            var logData = logValues.FirstOrDefault(logValue => logValue.Key == "{OriginalFormat}");
+            var loggedMessage = logValues.FirstOrDefault(logValue => logValue.Key == "{OriginalFormat}").Value?.ToString();
 
-            if (logData.Value == null)
-                return false;
-
-            var loggedMessage = logData.Value.ToString();
-
-            return loggedMessage.Contains(message);
+            return loggedMessage?.Contains(message) ?? false;
         }
     }
 }
