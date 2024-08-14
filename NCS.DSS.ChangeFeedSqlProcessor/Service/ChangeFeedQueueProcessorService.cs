@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DFC.AzureSql.Standard;
@@ -43,11 +44,11 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             var messageModel = JsonSerializer.Deserialize<ChangeFeedMessageModel>(message);
 
             return await SendToStoredProc(messageModel, documentJsonElement.ToString(), log);
-        }       
+        }
 
         private async Task<bool> SendToStoredProc(ChangeFeedMessageModel documentModel, string documentJson, ILogger log)
         {
-            _loggerHelper.LogMethodEnter(log);            
+            _loggerHelper.LogMethodEnter(log);
 
             var resourceName = GetResourceName(documentModel);
             var commandText = "Change_Feed_Insert_Update_" + resourceName;
@@ -64,9 +65,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             {
                 _loggerHelper.LogInformationMessage(log, CorrelationId, "attempting to insert document into SQL");
 
-                _loggerHelper.LogInformationMessage(log, CorrelationId, $"Document Json: {documentJson}");                
-
-                returnValue = await _sqlServerProvider.UpsertResource(documentJson, log, commandText, parameterName);                
+                returnValue = await _sqlServerProvider.UpsertResource(documentJson, log, commandText, parameterName);
             }
             catch (Exception ex)
             {
@@ -81,83 +80,37 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 
         private static string GetResourceName(ChangeFeedMessageModel documentModel)
         {
-            if (documentModel.IsAction)
-            {
-                return "dss-actions";
-            }
-            else if (documentModel.IsActionPlan)
-            {
-                return "dss-actionplans";
-            }
-            else if (documentModel.IsAddress)
-            {
-                return "dss-addresses";
-            }
-            else if (documentModel.IsAdviserDetail)
-            {
-                return "dss-adviserdetails";
-            }
-            else if (documentModel.IsCollection)
-            {
-                return "dss-collections";
-            }
-            else if (documentModel.IsContact)
-            {
-                return "dss-contacts";
-            }
-            else if (documentModel.IsCustomer)
-            {
-                return "dss-customers";
-            }
-            else if (documentModel.IsDiversity)
-            {
-                return "dss-diversity";
-            }
-            else if (documentModel.IsEmploymentProgression)
-            {
-                return "dss-employmentprogressions";
-            }
-            else if (documentModel.IsGoal)
-            {
-                return "dss-goals";
-            }
-            else if (documentModel.IsInteraction)
-            {
-                return "dss-interactions";
-            }
-            else if (documentModel.IsLearningProgression)
-            {
-                return "dss-learningprogressions";
-            }
-            else if (documentModel.IsOutcome)
-            {
-                return "dss-outcomes";
-            }
-            else if (documentModel.IsSession)
-            {
-                return "dss-sessions";
-            }
-            else if (documentModel.IsSubscription)
-            {
-                return "dss-subscriptions";
-            }
-            else if (documentModel.IsTransfer)
-            {
-                return "dss-transfers";
-            }
-            else if (documentModel.IsWebChat)
-            {
-                return "dss-webchats";
-            }
-            else if (documentModel.IsDigitalIdentity)
-            {
-                return "dss-digitalidentities";
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }
+            var resourceMappings = new Dictionary<Func<ChangeFeedMessageModel, bool>, string>
+                                        {
+                                            { x => x.IsAction, "dss-actions" },
+                                            { x => x.IsActionPlan, "dss-actionplans" },
+                                            { x => x.IsAddress, "dss-addresses" },
+                                            { x => x.IsAdviserDetail, "dss-adviserdetails" },
+                                            { x => x.IsCollection, "dss-collections" },
+                                            { x => x.IsContact, "dss-contacts" },
+                                            { x => x.IsCustomer, "dss-customers" },
+                                            { x => x.IsDiversity, "dss-diversity" },
+                                            { x => x.IsEmploymentProgression, "dss-employmentprogressions" },
+                                            { x => x.IsGoal, "dss-goals" },
+                                            { x => x.IsInteraction, "dss-interactions" },
+                                            { x => x.IsLearningProgression, "dss-learningprogressions" },
+                                            { x => x.IsOutcome, "dss-outcomes" },
+                                            { x => x.IsSession, "dss-sessions" },
+                                            { x => x.IsSubscription, "dss-subscriptions" },
+                                            { x => x.IsTransfer, "dss-transfers" },
+                                            { x => x.IsWebChat, "dss-webchats" },
+                                            { x => x.IsDigitalIdentity, "dss-digitalidentities" }
+                                        };
 
+            foreach (var mapping in resourceMappings)
+            {
+                if (mapping.Key(documentModel))
+                {
+                    return mapping.Value;
+                }
+            }
+
+            return string.Empty;
+        }
     }
 }

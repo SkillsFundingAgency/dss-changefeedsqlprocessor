@@ -4,7 +4,6 @@ using NCS.DSS.ChangeFeedSqlProcessor.Service;
 using Microsoft.Azure.Functions.Worker;
 using Azure.Messaging.ServiceBus;
 
-
 namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
 {
     public class ChangeFeedQueueProcessor
@@ -29,9 +28,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
             {                
                 _logger.LogInformation($"CorrelationId: {correlationId} Message: Service Bus Received Message cannot be null");
                 return;
-            }
-
-            _logger.LogInformation("Message Body: {body}", message.Body);
+            }            
 
             try
             {                
