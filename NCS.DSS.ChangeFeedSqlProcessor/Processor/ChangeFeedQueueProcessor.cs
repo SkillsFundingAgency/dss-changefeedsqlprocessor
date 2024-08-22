@@ -2,7 +2,6 @@ using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedSqlProcessor.Service;
-using System;
 
 namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
 {

@@ -2,10 +2,7 @@
 using DFC.Common.Standard.Logging;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedSqlProcessor.Models;
-using System;
-using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 {
