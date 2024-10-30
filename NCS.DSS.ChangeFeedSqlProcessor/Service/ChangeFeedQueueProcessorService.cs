@@ -1,12 +1,8 @@
-﻿using System;
-using System.Text;
-using System.Threading.Tasks;
-using DFC.AzureSql.Standard;
+﻿using DFC.AzureSql.Standard;
 using DFC.Common.Standard.Logging;
-using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedSqlProcessor.Models;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 {
@@ -23,37 +19,50 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             _loggerHelper = loggerHelper;
             _sqlServerProvider = sqlServerProvider;
         }
-        
-        public async Task<bool> SendToAzureSql(ChangeFeedMessageModel message, ILogger log)
+
+        public async Task<bool> SendToAzureSql(string message, ILogger log)
         {
-            await SendToStoredProc(message, log);
-            return true;
+            if (string.IsNullOrEmpty(message))
+            {
+                _loggerHelper.LogInformationMessage(log, CorrelationId, "document message is null");
+                return false;
+            }
+
+            var messageObject = JsonDocument.Parse(message);
+
+            var documentElementFound = messageObject.RootElement.TryGetProperty("Document", out var documentJsonElement);
+
+            if (!documentElementFound)
+            {
+                _loggerHelper.LogInformationMessage(log, CorrelationId, "document is not found in the message");
+                return false;
+            }
+
+            var messageModel = JsonSerializer.Deserialize<ChangeFeedMessageModel>(message);
+
+            return await SendToStoredProc(messageModel, documentJsonElement.ToString(), log);
         }
 
-        private async Task SendToStoredProc(ChangeFeedMessageModel documentModel, ILogger log)
+        private async Task<bool> SendToStoredProc(ChangeFeedMessageModel documentModel, string documentJson, ILogger log)
         {
             _loggerHelper.LogMethodEnter(log);
-
-            if (documentModel == null)
-            {
-                _loggerHelper.LogInformationMessage(log, CorrelationId, "document model is null");
-                return;
-            }
 
             var resourceName = GetResourceName(documentModel);
             var commandText = "Change_Feed_Insert_Update_" + resourceName;
             const string parameterName = "@Json";
+            var returnValue = false;
 
             if (string.IsNullOrWhiteSpace(resourceName))
             {
                 _loggerHelper.LogInformationMessage(log, CorrelationId, "resource Name is null");
-                return;
+                return false;
             }
 
             try
             {
                 _loggerHelper.LogInformationMessage(log, CorrelationId, "attempting to insert document into SQL");
-                await _sqlServerProvider.UpsertResource(documentModel.Document, log, commandText, parameterName);
+
+                returnValue = await _sqlServerProvider.UpsertResource(documentJson, log, commandText, parameterName);
             }
             catch (Exception ex)
             {
@@ -62,88 +71,43 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             }
 
             _loggerHelper.LogMethodExit(log);
-                       
-        }
-        
-        private static string GetResourceName(ChangeFeedMessageModel documentModel)
-        {
-            if (documentModel.IsAction)
-            {
-                return "dss-actions";
-            }
-            else if (documentModel.IsActionPlan)
-            {
-                return "dss-actionplans";
-            }
-            else if (documentModel.IsAddress)
-            {
-                return "dss-addresses";
-            }
-            else if (documentModel.IsAdviserDetail)
-            {
-                return "dss-adviserdetails";
-            }
-            else if (documentModel.IsCollection)
-            {
-                return "dss-collections";
-            }
-            else if (documentModel.IsContact)
-            {
-                return "dss-contacts";
-            }
-            else if (documentModel.IsCustomer)
-            {
-                return "dss-customers";
-            }
-            else if (documentModel.IsDiversity)
-            {
-                return "dss-diversity";
-            }
-            else if (documentModel.IsEmploymentProgression)
-            {
-                return "dss-employmentprogressions";
-            }
-            else if (documentModel.IsGoal)
-            {
-                return "dss-goals";
-            }
-            else if (documentModel.IsInteraction)
-            {
-                return "dss-interactions";
-            }
-            else if (documentModel.IsLearningProgression)
-            {
-                return "dss-learningprogressions";
-            }
-            else if (documentModel.IsOutcome)
-            {
-                return "dss-outcomes";
-            }
-            else if (documentModel.IsSession)
-            {
-                return "dss-sessions";
-            }
-            else if (documentModel.IsSubscription)
-            {
-                return "dss-subscriptions";
-            }
-            else if (documentModel.IsTransfer)
-            {
-                return "dss-transfers";
-            }
-            else if (documentModel.IsWebChat)
-            {
-                return "dss-webchats";
-            }
-            else if (documentModel.IsDigitalIdentity)
-            {
-                return "dss-digitalidentities";
-            }
-            else
-            {
-                return string.Empty;
-            }
+
+            return returnValue;
         }
 
+        private static string GetResourceName(ChangeFeedMessageModel documentModel)
+        {
+            var resourceMappings = new Dictionary<Func<ChangeFeedMessageModel, bool>, string>
+                                        {
+                                            { x => x.IsAction, "dss-actions" },
+                                            { x => x.IsActionPlan, "dss-actionplans" },
+                                            { x => x.IsAddress, "dss-addresses" },
+                                            { x => x.IsAdviserDetail, "dss-adviserdetails" },
+                                            { x => x.IsCollection, "dss-collections" },
+                                            { x => x.IsContact, "dss-contacts" },
+                                            { x => x.IsCustomer, "dss-customers" },
+                                            { x => x.IsDiversity, "dss-diversity" },
+                                            { x => x.IsEmploymentProgression, "dss-employmentprogressions" },
+                                            { x => x.IsGoal, "dss-goals" },
+                                            { x => x.IsInteraction, "dss-interactions" },
+                                            { x => x.IsLearningProgression, "dss-learningprogressions" },
+                                            { x => x.IsOutcome, "dss-outcomes" },
+                                            { x => x.IsSession, "dss-sessions" },
+                                            { x => x.IsSubscription, "dss-subscriptions" },
+                                            { x => x.IsTransfer, "dss-transfers" },
+                                            { x => x.IsWebChat, "dss-webchats" },
+                                            { x => x.IsDigitalIdentity, "dss-digitalidentities" }
+                                        };
+
+            foreach (var mapping in resourceMappings)
+            {
+                if (mapping.Key(documentModel))
+                {
+                    return mapping.Value;
+                }
+            }
+
+            return string.Empty;
+        }
     }
 }
