@@ -8,7 +8,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
     public class ChangeFeedQueueProcessor
     {
         private readonly IChangeFeedQueueProcessorService _changeFeedQueueProcessorService;
-        private readonly ILogger _logger;
+        private readonly ILogger<ChangeFeedQueueProcessor> _logger;
 
         public ChangeFeedQueueProcessor(IChangeFeedQueueProcessorService changeFeedQueueProcessorService,
             ILogger<ChangeFeedQueueProcessor> logger)
@@ -18,7 +18,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
         }
 
         [Function("ChangeFeedQueueProcessor")]
-        public async System.Threading.Tasks.Task RunAsync(
+        public async Task RunAsync(
             [ServiceBusTrigger("%QueueName%", Connection = "ServiceBusConnectionString")] ServiceBusReceivedMessage message)
         {
             var correlationId = Guid.NewGuid();
@@ -32,7 +32,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
             try
             {
                 _changeFeedQueueProcessorService.CorrelationId = correlationId;
-                await _changeFeedQueueProcessorService.SendToAzureSql(message.Body.ToString(), _logger);
+                await _changeFeedQueueProcessorService.SendToAzureSql(message.Body.ToString());
             }
             catch (Exception ex)
             {

@@ -1,6 +1,4 @@
-﻿using DFC.AzureSql.Standard;
-using DFC.Common.Standard.Logging;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedSqlProcessor.Models;
 using System.Text.Json;
 
@@ -9,22 +7,22 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
     public class ChangeFeedQueueProcessorService : IChangeFeedQueueProcessorService
     {
 
-        private readonly ILoggerHelper _loggerHelper;
-        private readonly ISQLServerProvider _sqlServerProvider;
+        private readonly ILogger<ChangeFeedQueueProcessorService> _logger;
+        private readonly ISqlDbProvider _sqlDbProvider;
 
         public Guid CorrelationId { get; set; }
 
-        public ChangeFeedQueueProcessorService(ILoggerHelper loggerHelper, ISQLServerProvider sqlServerProvider)
+        public ChangeFeedQueueProcessorService(ILogger<ChangeFeedQueueProcessorService> logger, ISqlDbProvider sqldbProvider)
         {
-            _loggerHelper = loggerHelper;
-            _sqlServerProvider = sqlServerProvider;
+            _logger = logger;
+            _sqlDbProvider = sqldbProvider;
         }
 
-        public async Task<bool> SendToAzureSql(string message, ILogger log)
+        public async Task<bool> SendToAzureSql(string message)
         {
             if (string.IsNullOrEmpty(message))
             {
-                _loggerHelper.LogInformationMessage(log, CorrelationId, "document message is null");
+                _logger.LogInformation("{CorrelationId} document message is null",CorrelationId);
                 return false;
             }
 
@@ -34,18 +32,20 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 
             if (!documentElementFound)
             {
-                _loggerHelper.LogInformationMessage(log, CorrelationId, "document is not found in the message");
+                _logger.LogInformation("{CorrelationId} document is not found in the message",CorrelationId);
                 return false;
             }
 
             var messageModel = JsonSerializer.Deserialize<ChangeFeedMessageModel>(message);
 
-            return await SendToStoredProc(messageModel, documentJsonElement.ToString(), log);
+            return await SendToStoredProc(messageModel, documentJsonElement.ToString());
         }
 
-        private async Task<bool> SendToStoredProc(ChangeFeedMessageModel documentModel, string documentJson, ILogger log)
+        private async Task<bool> SendToStoredProc(ChangeFeedMessageModel documentModel, string documentJson)
         {
-            _loggerHelper.LogMethodEnter(log);
+            var serviceName = nameof(ChangeFeedQueueProcessorService);
+
+            _logger.LogInformation("Started Executing SendToStoredProc Method in Service {ServiceName}", serviceName);
 
             var resourceName = GetResourceName(documentModel);
             var commandText = "Change_Feed_Insert_Update_" + resourceName;
@@ -54,23 +54,23 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 
             if (string.IsNullOrWhiteSpace(resourceName))
             {
-                _loggerHelper.LogInformationMessage(log, CorrelationId, "resource Name is null");
+                _logger.LogInformation("{CorrelationId} resource Name is null", CorrelationId);
                 return false;
             }
 
             try
             {
-                _loggerHelper.LogInformationMessage(log, CorrelationId, "attempting to insert document into SQL");
+                _logger.LogInformation("{CorrelationId} attempting to insert document into SQL", CorrelationId);
 
-                returnValue = await _sqlServerProvider.UpsertResource(documentJson, log, commandText, parameterName);
+                returnValue = await _sqlDbProvider.UpsertResource(documentJson, commandText, parameterName);
             }
             catch (Exception ex)
             {
-                _loggerHelper.LogException(log, Guid.NewGuid(), "Error when trying to insert & update change feed request into SQL", ex);
+                _logger.LogError(ex, "{CorrelationId} Error when trying to insert & update change feed request into SQL",CorrelationId);
                 throw;
             }
 
-            _loggerHelper.LogMethodExit(log);
+            _logger.LogInformation("Started Executing SendToStoredProc Method in Service {FunctionName}", serviceName);
 
             return returnValue;
         }
