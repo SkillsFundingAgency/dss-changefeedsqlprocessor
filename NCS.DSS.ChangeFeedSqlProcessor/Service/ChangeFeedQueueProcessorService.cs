@@ -22,7 +22,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
         {
             if (string.IsNullOrEmpty(message))
             {
-                _logger.LogInformation("{CorrelationId} document message is null",CorrelationId);
+                _logger.LogWarning("{CorrelationId} document message is null",CorrelationId);
                 return false;
             }
 
@@ -32,7 +32,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 
             if (!documentElementFound)
             {
-                _logger.LogInformation("{CorrelationId} document is not found in the message",CorrelationId);
+                _logger.LogWarning("{CorrelationId} document is not found in the message",CorrelationId);
                 return false;
             }
 
@@ -54,7 +54,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 
             if (string.IsNullOrWhiteSpace(resourceName))
             {
-                _logger.LogInformation("{CorrelationId} resource Name is null", CorrelationId);
+                _logger.LogWarning("{CorrelationId} resource Name is null", CorrelationId);
                 return false;
             }
 
@@ -70,12 +70,12 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
                 throw;
             }
 
-            _logger.LogInformation("Started Executing SendToStoredProc Method in Service {FunctionName}", serviceName);
+            _logger.LogInformation("Finished Executing SendToStoredProc Method in Service {FunctionName}", serviceName);
 
             return returnValue;
         }
 
-        private static string GetResourceName(ChangeFeedMessageModel documentModel)
+        private string GetResourceName(ChangeFeedMessageModel documentModel)
         {
             var resourceMappings = new Dictionary<Func<ChangeFeedMessageModel, bool>, string>
                                         {
@@ -103,6 +103,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             {
                 if (mapping.Key(documentModel))
                 {
+                    _logger.LogInformation("{CorrelationId} Update on Cosmos DB {cdb} has been found", CorrelationId,mapping.Value);
                     return mapping.Value;
                 }
             }

@@ -25,14 +25,22 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
 
             if (message == null)
             {
-                _logger.LogInformation($"CorrelationId: {correlationId} Message: Service Bus Received Message cannot be null");
+                _logger.LogWarning($"CorrelationId: {correlationId} Message: Service Bus Received Message cannot be null");
                 return;
             }
 
             try
             {
                 _changeFeedQueueProcessorService.CorrelationId = correlationId;
-                await _changeFeedQueueProcessorService.SendToAzureSql(message.Body.ToString());
+                var response = await _changeFeedQueueProcessorService.SendToAzureSql(message.Body.ToString());
+                if(response)
+                {
+                    _logger.LogInformation($"CorrelationId: {correlationId} Message: Successfully Updated SQL Record");
+                }
+                else
+                {
+                    _logger.LogWarning($"CorrelationId: {correlationId} Message: Failed to Update SQL Record");
+                }
             }
             catch (Exception ex)
             {
