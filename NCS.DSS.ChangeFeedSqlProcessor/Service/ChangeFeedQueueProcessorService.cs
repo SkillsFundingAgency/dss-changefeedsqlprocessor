@@ -42,11 +42,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
         }
 
         private async Task<bool> SendToStoredProc(ChangeFeedMessageModel documentModel, string documentJson)
-        {
-            var serviceName = nameof(ChangeFeedQueueProcessorService);
-
-            _logger.LogInformation("Started Executing SendToStoredProc Method in Service {ServiceName}", serviceName);
-
+        {           
             var resourceName = GetResourceName(documentModel);
             var commandText = "Change_Feed_Insert_Update_" + resourceName;
             const string parameterName = "@Json";
@@ -69,8 +65,6 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
                 _logger.LogError(ex, "{CorrelationId} Error when trying to insert & update change feed request into SQL",CorrelationId);
                 throw;
             }
-
-            _logger.LogInformation("Finished Executing SendToStoredProc Method in Service {FunctionName}", serviceName);
 
             return returnValue;
         }
