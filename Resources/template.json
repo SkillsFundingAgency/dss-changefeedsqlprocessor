@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "appInsightsInstrumentationKey":{
+    "appInsightsInstrumentationKey": {
       "type": "string"
     },
     "changeFeedProcessorPrefix": {
@@ -17,29 +17,25 @@
     "sqlConnectionString": {
       "type": "string"
     },
-    "storageAccountName": {
-      "type": "string"
-    },
-    "storageAccountKey": {
+    "keyVaultName": {
       "type": "string"
     }
   },
   "variables": {
     "environmentName": "[toUpper(split(parameters('changeFeedProcessorPrefix'), '-')[1])]",
-    "functionAppName": "[toLower(concat(parameters('changeFeedProcessorPrefix'), '-fa', parameters('functionAppSuffix')))]",
-    "storageAccountConnectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=', parameters('storageAccountKey'), ';EndpointSuffix=core.windows.net')]"
+    "functionAppName": "[toLower(concat(parameters('changeFeedProcessorPrefix'), '-fa', parameters('functionAppSuffix')))]"
   },
   "resources": [
     {
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "2023-12-01",
-      "name": "[format('{0}/{1}', parameters('functionAppName'), 'appsettings')]",
+      "name": "[format('{0}/{1}', variables('functionAppName'), 'appsettings')]",
       "properties": {
         "EnvironmentName": "[variables('environmentName')]",
         "FUNCTIONS_EXTENSION_VERSION": "~4",
         "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
         "MSDEPLOY_RENAME_LOCKED_FILES": "1",
-        "AzureWebJobsStorage": "[variables('storageAccountConnectionString')]",
+        "AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName=SharedStorageAccountConnectionString)', parameters('keyVaultName'))]",
         "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
         "QueueName": "dss.changefeedqueue",
         "ServiceBusConnectionString": "[parameters('serviceBusConnectionString')]",
@@ -49,7 +45,7 @@
     {
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "2023-12-01",
-      "name": "[format('{0}/{1}', parameters('functionAppName'), 'connectionstrings')]",
+      "name": "[format('{0}/{1}', variables('functionAppName'), 'connectionstrings')]",
       "properties": {}
     }
   ],

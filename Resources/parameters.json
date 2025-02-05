@@ -18,11 +18,8 @@
         "sqlConnectionString": {
             "value": "__SqlConnectionString__"
         },
-        "storageAccountName" : {
-            "value": "__storageAccountName__"
-        },
-        "storageAccountKey" : {
-            "value": "__storageAccountKey__"
+        "keyVaultName": {
+            "value": "__SharedKeyVaultName__"
         }
     }
 }
