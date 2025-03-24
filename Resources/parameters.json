@@ -6,14 +6,8 @@
         "serviceBusConnectionString": {
             "value": "__serviceBusConnectionString__"
         },
-        "sharedAppServicePlanName": {
-            "value": "__SharedAppServicePlanName__"
-        },
         "functionAppSuffix": {
             "value": "__FunctionAppSuffix__"
-        },
-        "sharedAppServicePlanResourceGroup": {
-            "value": "__SharedAppServicePlanResourceGroup__"
         },
         "appInsightsInstrumentationKey": {
             "value": "__appInsightsInstrumentationKey__"
@@ -24,11 +18,8 @@
         "sqlConnectionString": {
             "value": "__SqlConnectionString__"
         },
-        "storageAccountName" : {
-            "value": "__storageAccountName__"
-        },
-        "storageAccountKey" : {
-            "value": "__storageAccountKey__"
+        "keyVaultName": {
+            "value": "__SharedKeyVaultName__"
         }
     }
 }
