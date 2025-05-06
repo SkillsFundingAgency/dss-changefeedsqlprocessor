@@ -19,6 +19,5 @@
         public bool IsSubscription { get; set; }
         public bool IsTransfer { get; set; }
         public bool IsWebChat { get; set; }
-        public bool IsDigitalIdentity { get; set; }
     }
 }

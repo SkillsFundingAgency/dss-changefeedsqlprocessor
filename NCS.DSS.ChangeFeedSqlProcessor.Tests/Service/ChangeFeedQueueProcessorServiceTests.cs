@@ -18,7 +18,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
         }
 
         [Test]
-        public async Task SendToAzureSql_ReturnsFalseAndLogsInformation_WhenMessageIsNull()
+        public async Task SendToAzureSql_ReturnsFalseAndLogsWarning_WhenMessageIsNull()
         {
             //Arrange
             var logMessage = "document message is null";
@@ -29,7 +29,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
             //Assert
             Assert.That(result, Is.False);
             _logger.Verify(x => x.Log(
-               LogLevel.Information,
+               LogLevel.Warning,
                It.IsAny<EventId>(),
                It.Is<It.IsAnyType>((x, _) => LogMessageMatcher(x, logMessage)),
                It.IsAny<Exception>(),
@@ -38,7 +38,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
         }
 
         [Test]
-        public async Task SendToAzureSql_ReturnsFalseAndLogsInformation_WhenResourceNameIsEmptyInMessageDocumentModel()
+        public async Task SendToAzureSql_ReturnsFalseAndLogsWarning_WhenResourceNameIsEmptyInMessageDocumentModel()
         {
             //Arrange
             var logMessage = "resource Name is null";
@@ -52,7 +52,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
             //Assert
             Assert.That(result, Is.False);
             _logger.Verify(x => x.Log(
-               LogLevel.Information,
+               LogLevel.Warning,
                It.IsAny<EventId>(),
                It.Is<It.IsAnyType>((x, _) => LogMessageMatcher(x, logMessage)),
                It.IsAny<Exception>(),
@@ -86,7 +86,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
         }
 
         [Test]
-        public async Task SendToAzureSql_ReturnsFalseAndLogsInformation_WhenDocumentNotFoundInMessage()
+        public async Task SendToAzureSql_ReturnsFalseAndLogsWarning_WhenDocumentNotFoundInMessage()
         {
             //Arrange
             var logMessage = "document is not found in the message";
@@ -98,7 +98,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
 
             //Assert
             Assert.That(result, Is.False);
-            _logger.Verify(x => x.Log(LogLevel.Information, 
+            _logger.Verify(x => x.Log(LogLevel.Warning, 
                 It.IsAny<EventId>(), 
                 It.Is<It.IsAnyType>((x, _) => LogMessageMatcher(x, logMessage)), 
                 It.IsAny<Exception>(), 
@@ -143,7 +143,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
 
             //Act
             var documentMessage = "{\"id\":\"51b29377-76f6-4062-b443-c6bb5e3cad5f\",\"_rid\":\"cGgSAMDrSwAmTgcAAAAAAA==\",\"_self\":\"dbs/cGgSAA==/colls/cGgSAMDrSwA=/docs/cGgSAMDrSwAmTgcAAAAAAA==/\",\"_ts\":1723544012,\"_etag\":\"\\\"9b021ee6-0000-0d00-0000-66bb31cc0000\\\"\",\"DateOfRegistration\":\"2024-08-13T10:13:32.4487063Z\",\"Title\":99,\"GivenName\":\"Bob\",\"FamilyName\":\"Customer\",\"Gender\":99,\"OptInUserResearch\":false,\"OptInMarketResearch\":false,\"IntroducedBy\":99,\"SubcontractorId\":\"\",\"LastModifiedDate\":\"2024-08-13T10:13:32.4487093Z\",\"LastModifiedTouchpointId\":\"9999999999\",\"PriorityGroups\":[1,3],\"CreatedBy\":\"9999999999\",\"_lsn\":717483}";
-            var message = $"{{\"Document\":{documentMessage},\"IsAction\":false,\"IsActionPlan\":true,\"IsAddress\":false,\"IsAdviserDetail\":false,\"IsCollection\":false,\"IsContact\":false,\"IsCustomer\":false,\"IsDiversity\":false,\"IsEmploymentProgression\":false,\"IsGoal\":false,\"IsInteraction\":false,\"IsLearningProgression\":false,\"IsOutcome\":false,\"IsSession\":false,\"IsSubscription\":false,\"IsTransfer\":false,\"IsWebChat\":false,\"IsDigitalIdentity\":false}}";
+            var message = $"{{\"Document\":{documentMessage},\"IsAction\":false,\"IsActionPlan\":true,\"IsAddress\":false,\"IsAdviserDetail\":false,\"IsCollection\":false,\"IsContact\":false,\"IsCustomer\":false,\"IsDiversity\":false,\"IsEmploymentProgression\":false,\"IsGoal\":false,\"IsInteraction\":false,\"IsLearningProgression\":false,\"IsOutcome\":false,\"IsSession\":false,\"IsSubscription\":false,\"IsTransfer\":false,\"IsWebChat\":false}}";
             var result = await _service.SendToAzureSql(message);
 
             //Assert
@@ -166,7 +166,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
 
             //Act
             var documentMessage = "{\"id\":\"51b29377-76f6-4062-b443-c6bb5e3cad5f\",\"_rid\":\"cGgSAMDrSwAmTgcAAAAAAA==\",\"_self\":\"dbs/cGgSAA==/colls/cGgSAMDrSwA=/docs/cGgSAMDrSwAmTgcAAAAAAA==/\",\"_ts\":1723544012,\"_etag\":\"\\\"9b021ee6-0000-0d00-0000-66bb31cc0000\\\"\",\"DateOfRegistration\":\"2024-08-13T10:13:32.4487063Z\",\"Title\":99,\"GivenName\":\"Bob\",\"FamilyName\":\"Customer\",\"Gender\":99,\"OptInUserResearch\":false,\"OptInMarketResearch\":false,\"IntroducedBy\":99,\"SubcontractorId\":\"\",\"LastModifiedDate\":\"2024-08-13T10:13:32.4487093Z\",\"LastModifiedTouchpointId\":\"9999999999\",\"PriorityGroups\":[1,3],\"CreatedBy\":\"9999999999\",\"_lsn\":717483}";
-            var message = $"{{\"Document\":{documentMessage},\"IsAction\":false,\"IsActionPlan\":false,\"IsAddress\":true,\"IsAdviserDetail\":false,\"IsCollection\":false,\"IsContact\":false,\"IsCustomer\":false,\"IsDiversity\":false,\"IsEmploymentProgression\":false,\"IsGoal\":false,\"IsInteraction\":false,\"IsLearningProgression\":false,\"IsOutcome\":false,\"IsSession\":false,\"IsSubscription\":false,\"IsTransfer\":false,\"IsWebChat\":false,\"IsDigitalIdentity\":false}}";
+            var message = $"{{\"Document\":{documentMessage},\"IsAction\":false,\"IsActionPlan\":false,\"IsAddress\":true,\"IsAdviserDetail\":false,\"IsCollection\":false,\"IsContact\":false,\"IsCustomer\":false,\"IsDiversity\":false,\"IsEmploymentProgression\":false,\"IsGoal\":false,\"IsInteraction\":false,\"IsLearningProgression\":false,\"IsOutcome\":false,\"IsSession\":false,\"IsSubscription\":false,\"IsTransfer\":false,\"IsWebChat\":false}}";
             var result = await _service.SendToAzureSql(message);
 
             //Assert
@@ -189,7 +189,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
 
             //Act
             var documentMessage = "{\"id\":\"51b29377-76f6-4062-b443-c6bb5e3cad5f\",\"_rid\":\"cGgSAMDrSwAmTgcAAAAAAA==\",\"_self\":\"dbs/cGgSAA==/colls/cGgSAMDrSwA=/docs/cGgSAMDrSwAmTgcAAAAAAA==/\",\"_ts\":1723544012,\"_etag\":\"\\\"9b021ee6-0000-0d00-0000-66bb31cc0000\\\"\",\"DateOfRegistration\":\"2024-08-13T10:13:32.4487063Z\",\"Title\":99,\"GivenName\":\"Bob\",\"FamilyName\":\"Customer\",\"Gender\":99,\"OptInUserResearch\":false,\"OptInMarketResearch\":false,\"IntroducedBy\":99,\"SubcontractorId\":\"\",\"LastModifiedDate\":\"2024-08-13T10:13:32.4487093Z\",\"LastModifiedTouchpointId\":\"9999999999\",\"PriorityGroups\":[1,3],\"CreatedBy\":\"9999999999\",\"_lsn\":717483}";
-            var message = $"{{\"Document\":{documentMessage},\"IsAction\":false,\"IsActionPlan\":false,\"IsAddress\":false,\"IsAdviserDetail\":false,\"IsCollection\":false,\"IsContact\":false,\"IsCustomer\":false,\"IsDiversity\":false,\"IsEmploymentProgression\":false,\"IsGoal\":true,\"IsInteraction\":false,\"IsLearningProgression\":false,\"IsOutcome\":false,\"IsSession\":false,\"IsSubscription\":false,\"IsTransfer\":false,\"IsWebChat\":false,\"IsDigitalIdentity\":false}}";
+            var message = $"{{\"Document\":{documentMessage},\"IsAction\":false,\"IsActionPlan\":false,\"IsAddress\":false,\"IsAdviserDetail\":false,\"IsCollection\":false,\"IsContact\":false,\"IsCustomer\":false,\"IsDiversity\":false,\"IsEmploymentProgression\":false,\"IsGoal\":true,\"IsInteraction\":false,\"IsLearningProgression\":false,\"IsOutcome\":false,\"IsSession\":false,\"IsSubscription\":false,\"IsTransfer\":false,\"IsWebChat\":false}}";
             var result = await _service.SendToAzureSql(message);
 
             //Assert
@@ -212,7 +212,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
 
             //Act
             var documentMessage = "{\"id\":\"51b29377-76f6-4062-b443-c6bb5e3cad5f\",\"_rid\":\"cGgSAMDrSwAmTgcAAAAAAA==\",\"_self\":\"dbs/cGgSAA==/colls/cGgSAMDrSwA=/docs/cGgSAMDrSwAmTgcAAAAAAA==/\",\"_ts\":1723544012,\"_etag\":\"\\\"9b021ee6-0000-0d00-0000-66bb31cc0000\\\"\",\"DateOfRegistration\":\"2024-08-13T10:13:32.4487063Z\",\"Title\":99,\"GivenName\":\"Bob\",\"FamilyName\":\"Customer\",\"Gender\":99,\"OptInUserResearch\":false,\"OptInMarketResearch\":false,\"IntroducedBy\":99,\"SubcontractorId\":\"\",\"LastModifiedDate\":\"2024-08-13T10:13:32.4487093Z\",\"LastModifiedTouchpointId\":\"9999999999\",\"PriorityGroups\":[1,3],\"CreatedBy\":\"9999999999\",\"_lsn\":717483}";
-            var message = $"{{\"Document\":{documentMessage},\"IsAction\":false,\"IsActionPlan\":false,\"IsAddress\":false,\"IsAdviserDetail\":false,\"IsCollection\":false,\"IsContact\":false,\"IsCustomer\":false,\"IsDiversity\":false,\"IsEmploymentProgression\":false,\"IsGoal\":false,\"IsInteraction\":false,\"IsLearningProgression\":false,\"IsOutcome\":false,\"IsSession\":false,\"IsSubscription\":false,\"IsTransfer\":false,\"IsWebChat\":true,\"IsDigitalIdentity\":false}}";
+            var message = $"{{\"Document\":{documentMessage},\"IsAction\":false,\"IsActionPlan\":false,\"IsAddress\":false,\"IsAdviserDetail\":false,\"IsCollection\":false,\"IsContact\":false,\"IsCustomer\":false,\"IsDiversity\":false,\"IsEmploymentProgression\":false,\"IsGoal\":false,\"IsInteraction\":false,\"IsLearningProgression\":false,\"IsOutcome\":false,\"IsSession\":false,\"IsSubscription\":false,\"IsTransfer\":false,\"IsWebChat\":true}}";
             var result = await _service.SendToAzureSql(message);
 
             //Assert
@@ -221,33 +221,6 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service.Tests
             _sqlDbProvider.Verify(sp => sp.UpsertResource(documentMessage, commandText, parameterName), Times.Once);
         }
 
-        [Test]
-        public async Task SendToAzureSql_UpsertsResource_WhenDocumentMessageIsForDigitalIdentitiesEntity()
-        {
-            //Arrange
-            var parameterName = "@Json";
-            var logMessage = "attempting to insert document into SQL";
-            var commandText = "Change_Feed_Insert_Update_dss-digitalidentities";
-            var exception = new Exception();
-
-            _sqlDbProvider.Setup(sp => sp.UpsertResource(It.IsAny<string>(), It.IsAny<string>(), parameterName))
-                .ReturnsAsync(true);
-
-            //Act
-            var documentMessage = "{\"id\":\"51b29377-76f6-4062-b443-c6bb5e3cad5f\",\"_rid\":\"cGgSAMDrSwAmTgcAAAAAAA==\",\"_self\":\"dbs/cGgSAA==/colls/cGgSAMDrSwA=/docs/cGgSAMDrSwAmTgcAAAAAAA==/\",\"_ts\":1723544012,\"_etag\":\"\\\"9b021ee6-0000-0d00-0000-66bb31cc0000\\\"\",\"DateOfRegistration\":\"2024-08-13T10:13:32.4487063Z\",\"Title\":99,\"GivenName\":\"Bob\",\"FamilyName\":\"Customer\",\"Gender\":99,\"OptInUserResearch\":false,\"OptInMarketResearch\":false,\"IntroducedBy\":99,\"SubcontractorId\":\"\",\"LastModifiedDate\":\"2024-08-13T10:13:32.4487093Z\",\"LastModifiedTouchpointId\":\"9999999999\",\"PriorityGroups\":[1,3],\"CreatedBy\":\"9999999999\",\"_lsn\":717483}";
-            var message = $"{{\"Document\":{documentMessage},\"IsAction\":false,\"IsActionPlan\":false,\"IsAddress\":false,\"IsAdviserDetail\":false,\"IsCollection\":false,\"IsContact\":false,\"IsCustomer\":false,\"IsDiversity\":false,\"IsEmploymentProgression\":false,\"IsGoal\":false,\"IsInteraction\":false,\"IsLearningProgression\":false,\"IsOutcome\":false,\"IsSession\":false,\"IsSubscription\":false,\"IsTransfer\":false,\"IsWebChat\":false,\"IsDigitalIdentity\":true}}";
-            var result = await _service.SendToAzureSql(message);
-
-            //Assert
-            Assert.That(result, Is.True);
-            _logger.Verify(x => x.Log(LogLevel.Information, 
-                It.IsAny<EventId>(), 
-                It.Is<It.IsAnyType>((x, _) => LogMessageMatcher(x, logMessage)), 
-                It.IsAny<Exception>(), 
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()), 
-                Times.Once);
-            _sqlDbProvider.Verify(sp => sp.UpsertResource(documentMessage, commandText, parameterName), Times.Once);
-        }
         private static bool LogMessageMatcher(object formattedLogValueObject, string message)
         {
             var logValues = formattedLogValueObject as IReadOnlyList<KeyValuePair<string, object>>;
