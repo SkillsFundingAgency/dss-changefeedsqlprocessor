@@ -89,7 +89,8 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
                                             { x => x.IsSession, "dss-sessions" },
                                             { x => x.IsSubscription, "dss-subscriptions" },
                                             { x => x.IsTransfer, "dss-transfers" },
-                                            { x => x.IsWebChat, "dss-webchats" }
+                                            { x => x.IsWebChat, "dss-webchats" },
+                                            { x => x.IsDigitalIdentity, "dss-digitalidentities" }
                                         };
 
             foreach (var mapping in resourceMappings)
