@@ -1,17 +1,37 @@
-using DFC.AzureSql.Standard;
-using DFC.Common.Standard.Logging;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NCS.DSS.ChangeFeedSqlProcessor.Service;
-var host = new HostBuilder()
-    .ConfigureFunctionsWorkerDefaults()
-    .ConfigureServices(services =>
+namespace NCS.DSS.ChangeFeedSqlProcessor
+{
+    internal class Program
     {
-        services.AddLogging();
-        services.AddSingleton<ILoggerHelper, LoggerHelper>();
-        services.AddSingleton<ISQLServerProvider, SQLServerProvider>();
-        services.AddSingleton<IChangeFeedQueueProcessorService, ChangeFeedQueueProcessorService>();
-    })
-    .Build();
+        private static async Task Main(string[] args)
+        {
+            var host = new HostBuilder()
+                .ConfigureFunctionsWorkerDefaults()
+                .ConfigureServices(services =>
+                {
+                    services.AddLogging();
+                    services.AddApplicationInsightsTelemetryWorkerService();
+                    services.ConfigureFunctionsApplicationInsights();
+                    services.AddSingleton<ISqlDbProvider, SqlDbProvider>();
+                    services.AddSingleton<IChangeFeedQueueProcessorService, ChangeFeedQueueProcessorService>();
+                    services.Configure<LoggerFilterOptions>(options =>
+                    {
+                        LoggerFilterRule toRemove = options.Rules.FirstOrDefault(rule => rule.ProviderName
+                            == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
+                        if (toRemove is not null)
+                        {
+                            options.Rules.Remove(toRemove);
+                        }
+                    });
+                })
+                .Build();
 
-host.Run();
+            await host.RunAsync();
+        }
+    }
+}
+
