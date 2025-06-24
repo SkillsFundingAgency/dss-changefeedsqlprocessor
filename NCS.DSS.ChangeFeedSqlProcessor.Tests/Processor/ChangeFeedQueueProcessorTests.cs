@@ -20,7 +20,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor.Tests
         }
 
         [Test]
-        public async Task RunAsync_LogsInformation_WhenMessageModelIsNull()
+        public async Task RunAsync_LogsWarning_WhenMessageModelIsNull()
         {
             //Arrange
             var logMessage = "Message: Service Bus Received Message cannot be null";
@@ -30,7 +30,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor.Tests
 
             //Assert                        
             _logger.Verify(x => x.Log(
-                LogLevel.Information,
+                LogLevel.Warning,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((x, _) => LogMessageMatcher(x, logMessage)),
                 It.IsAny<Exception>(),
