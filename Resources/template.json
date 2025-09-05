@@ -8,13 +8,7 @@
     "changeFeedProcessorPrefix": {
       "type": "string"
     },
-    "serviceBusConnectionString": {
-      "type": "string"
-    },
     "functionAppSuffix": {
-      "type": "string"
-    },
-    "sqlConnectionString": {
       "type": "string"
     },
     "keyVaultName": {
@@ -38,8 +32,8 @@
         "AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName=SharedStorageAccountConnectionString)', parameters('keyVaultName'))]",
         "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
         "QueueName": "dss.changefeedqueue",
-        "ServiceBusConnectionString": "[parameters('serviceBusConnectionString')]",
-        "SQLConnString": "[parameters('sqlConnectionString')]"
+        "ServiceBusConnectionString": "[format('@Microsoft.KeyVault(VaultName={0};SecretName=ServiceBusConnectionString)', parameters('keyVaultName'))]",
+        "SQLConnString": "[format('@Microsoft.KeyVault(VaultName={0};SecretName=AzureSQLConnectionString)', parameters('keyVaultName'))]"
       }
     },
     {
