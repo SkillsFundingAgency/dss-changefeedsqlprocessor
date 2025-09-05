@@ -2,10 +2,6 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-
-        "serviceBusConnectionString": {
-            "value": "__serviceBusConnectionString__"
-        },
         "functionAppSuffix": {
             "value": "__FunctionAppSuffix__"
         },
@@ -14,9 +10,6 @@
         },
         "changeFeedProcessorPrefix": {
             "value": "__ChangeFeedProcessorPrefix__"
-        },
-        "sqlConnectionString": {
-            "value": "__SqlConnectionString__"
         },
         "keyVaultName": {
             "value": "__SharedKeyVaultName__"
