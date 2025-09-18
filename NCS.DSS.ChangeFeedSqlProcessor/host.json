@@ -3,6 +3,8 @@
   "logging": {
     "logLevel": {
       "default": "Information",
+      "Azure.Core": "Warning",
+      "Azure.Messaging.ServiceBus": "Warning",
       "Function": "Warning"
     },
     "applicationInsights": {
