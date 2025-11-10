@@ -56,7 +56,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
 
             try
             {
-                _logger.LogInformation("{CorrelationId} attempting to insert document into SQL", CorrelationId);
+                _logger.LogTrace("{CorrelationId} attempting to insert document into SQL", CorrelationId);
 
                 returnValue = await _sqlDbProvider.UpsertResource(documentJson, commandText, parameterName);
             }
@@ -96,7 +96,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             {
                 if (mapping.Key(documentModel))
                 {
-                    _logger.LogInformation("{CorrelationId} Update on Cosmos DB {cdb} has been found", CorrelationId,mapping.Value);
+                    _logger.LogTrace("{CorrelationId} Update on Cosmos DB {cdb} has been found", CorrelationId,mapping.Value);
                     return mapping.Value;
                 }
             }

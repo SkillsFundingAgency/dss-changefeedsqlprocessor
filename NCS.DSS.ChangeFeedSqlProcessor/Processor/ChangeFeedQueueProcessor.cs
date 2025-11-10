@@ -23,7 +23,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
         {
             var functionName = nameof(ChangeFeedQueueProcessor);
 
-            _logger.LogInformation("Function {FunctionName} has been invoked", functionName);
+            _logger.LogTrace("Function {FunctionName} has been invoked", functionName);
 
             var correlationId = Guid.NewGuid();
 
@@ -36,11 +36,11 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
             try
             {
                 _changeFeedQueueProcessorService.CorrelationId = correlationId;
-                _logger.LogInformation("{CorrelationId} Attempting to apply update to SQL database",correlationId);
+                _logger.LogTrace("{CorrelationId} Attempting to apply update to SQL database",correlationId);
                 var response = await _changeFeedQueueProcessorService.SendToAzureSql(message.Body.ToString());
                 if(response)
                 {
-                    _logger.LogInformation("{CorrelationId} Message: Successfully Updated SQL Record",correlationId);
+                    _logger.LogTrace("{CorrelationId} Message: Successfully Updated SQL Record",correlationId);
                 }
                 else
                 {
@@ -52,7 +52,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Processor
                 _logger.LogError(ex,"{CorrelationId} Message: Unable to send document to sql Exception: {Exception}",correlationId,ex.Message);
                 throw;
             }
-            _logger.LogInformation("Function {FunctionName} has finished invoking", functionName);
+            _logger.LogTrace("Function {FunctionName} has finished invoking", functionName);
         }
     }
 }

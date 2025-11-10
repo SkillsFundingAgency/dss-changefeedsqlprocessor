@@ -9,8 +9,6 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
     {
         private readonly ILogger<SqlDbProvider> _logger;
 
-        private SqlConnection _dbConnection;
-
         private readonly string _sqlConnString = Environment.GetEnvironmentVariable("SQLConnString");
 
         private readonly Guid _correlationId = Guid.NewGuid();
@@ -20,7 +18,7 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             _logger = logger;
         }
 
-        public async Task<bool> UpsertResource(string entity,string commandText, string parameterName)
+        public async Task<bool> UpsertResource(string entity, string commandText, string parameterName)
         {
             try
             {
@@ -32,19 +30,19 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception,"{CorrelationId} Failed to Execute SQL Command for {document}", _correlationId,entity);
+                _logger.LogError(exception, "{CorrelationId} Failed to Execute SQL Command for {document}", _correlationId, entity);
                 throw;
             }
         }
 
         private void Execute(string document, string commandText, string parameterName)
         {
-            using (_dbConnection = new SqlConnection(_sqlConnString))
+            using (var dbconn = new SqlConnection(_sqlConnString))
+            using (var dbCommand = BuildCommand(commandText, dbconn))
             {
-                using SqlCommand dbCommand = BuildCommand(commandText);
                 try
                 {
-                    _dbConnection.Open();
+                    dbconn.Open();
                     dbCommand.Parameters.Add(BuildParameter(dbCommand, document, parameterName));
                     dbCommand.ExecuteNonQuery();
                 }
@@ -55,23 +53,23 @@ namespace NCS.DSS.ChangeFeedSqlProcessor.Service
                 }
                 finally
                 {
-                    _dbConnection.Close();
+                    dbconn.Close();
                 }
             }
         }
 
         private SqlParameter BuildParameter(SqlCommand command, string document, string parameterName)
         {
-            SqlParameter dbDataParameter = command.CreateParameter();
+            var dbDataParameter = command.CreateParameter();
             dbDataParameter.ParameterName = parameterName;
             dbDataParameter.Direction = ParameterDirection.Input;
             dbDataParameter.Value = document;
             return dbDataParameter;
         }
 
-        private SqlCommand BuildCommand(string commandText)
+        private SqlCommand BuildCommand(string commandText, SqlConnection dbconn)
         {
-            SqlCommand dbCommand = _dbConnection.CreateCommand();
+            var dbCommand = dbconn.CreateCommand();
             dbCommand.CommandType = CommandType.StoredProcedure;
             dbCommand.CommandText = commandText;
             return dbCommand;

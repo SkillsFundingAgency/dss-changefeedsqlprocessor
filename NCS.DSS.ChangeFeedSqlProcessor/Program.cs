@@ -16,8 +16,8 @@ namespace NCS.DSS.ChangeFeedSqlProcessor
                     services.AddLogging();
                     services.AddApplicationInsightsTelemetryWorkerService();
                     services.ConfigureFunctionsApplicationInsights();
-                    services.AddSingleton<ISqlDbProvider, SqlDbProvider>();
-                    services.AddSingleton<IChangeFeedQueueProcessorService, ChangeFeedQueueProcessorService>();
+                    services.AddScoped<ISqlDbProvider, SqlDbProvider>();
+                    services.AddScoped<IChangeFeedQueueProcessorService, ChangeFeedQueueProcessorService>();
                     services.Configure<LoggerFilterOptions>(options =>
                     {
                         LoggerFilterRule toRemove = options.Rules.FirstOrDefault(rule => rule.ProviderName
